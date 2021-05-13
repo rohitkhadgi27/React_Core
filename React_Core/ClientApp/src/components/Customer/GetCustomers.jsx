@@ -1,6 +1,7 @@
-import React, { Component, useEffect } from 'react';
-import { Table, Button } from 'semantic-ui-react';
+import React, { Component } from 'react';
 import axios from 'axios';
+import CustomerTable from './CustomerTable';
+import DeleteCustomer from './DeleteCustomer';
 
 export default class GetCustomers extends Component {
   constructor(){
@@ -12,9 +13,15 @@ export default class GetCustomers extends Component {
     this.customerList();
   }
 
+  componentWillUnmount() {
+    this.setState = (state,callback)=>{
+      return;
+    };
+}
+
   customerList() {
     axios.get(`Customers/GetCustomers`)
-    .then(( {data} ) => {
+    .then(({data}) => {
       this.setState({
         customers: data
       });
@@ -25,28 +32,9 @@ export default class GetCustomers extends Component {
   render(){
     const {customers} = this.state;
     return(
-      <Table basic>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Address</Table.HeaderCell>
-            <Table.HeaderCell>Actions</Table.HeaderCell>
-            <Table.HeaderCell>Actions</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          { customers.map(c => 
-            <Table.Row>
-              <Table.Cell>{ c.name }</Table.Cell>
-              <Table.Cell>{ c.address }</Table.Cell>
-              <Table.Cell><Button color='yellow'>Edit</Button></Table.Cell>
-              <Table.Cell><Button negative>Delete</Button></Table.Cell>
-            </Table.Row>
-            ) 
-          };
-        </Table.Body>
-      </Table>
+      <div>
+        <CustomerTable customers = {customers} refreshData ={this.customerList()} />
+      </div>  
     );
   }
 };

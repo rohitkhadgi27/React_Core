@@ -12,23 +12,21 @@ export class NavMenu extends Component {
     }
 
     if (window.performance) {
-      if (performance.navigation.type == 1) {      
+      if (performance.navigation.type === 1) {      
         const url = window.location.href.split("")
         const urlNavName = url.splice(24, url.length).join("");
         this.state = {
           activeItem: urlNavName
         };
-      } else {
-        alert("Something went wrong!");
-      }
+      } 
     }
   }
 
-  handleItemClick = (e, { name }) => this.setState({
+  handleItemClick = (e, {name}) => this.setState({
     activeItem: name});
 
   render() {
-    const { activeItem } = this.state
+    const {activeItem} = this.state
 
     return (
       <Segment inverted>
