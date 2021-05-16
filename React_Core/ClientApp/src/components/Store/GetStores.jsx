@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import CustomerTable from './CustomerTable';
+import StoreTable from './StoreTable';
 
-export default class GetCustomers extends Component {
+export default class GetStores extends Component {
   constructor(){
     super();
-    this.state = {customers: []};
+    this.state = {stores: []};
   }
  
   componentDidMount(){
-    this.customerList();
+    this.storeList();
   }
 
   //React state update on an unmounted component
@@ -19,22 +19,22 @@ export default class GetCustomers extends Component {
     };
 }
 
-//Getting all the customers data 
-  customerList() {
-    axios.get(`Customers/GetCustomers`)
+//Getting all the stores data 
+  storeList() {
+    axios.get(`Stores/GetStores`)
     .then(({data}) => {
       this.setState({
-        customers: data
+        stores: data
       });
     })
     .catch(err => console.log(err));
   };
 
   render(){
-    const {customers} = this.state;
+    const {stores} = this.state;
     return(
       <div>
-        <CustomerTable customers = {customers} refreshData ={this.customerList()} />
+        <StoreTable stores = {stores} refreshData ={this.storeList()} />
       </div>  
     );
   }

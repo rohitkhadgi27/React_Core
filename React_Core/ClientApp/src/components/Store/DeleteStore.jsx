@@ -2,14 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import { Button, Header, Icon, Modal } from 'semantic-ui-react'
 
-const DeleteCustomer = (props) => {
+const DeleteStore = (props) => {
 
-    //Receiving all the data that is passed from the CustomerTable Component
+    //Receiving all the data that is passed from the StoreTable Component
     const{open, toggleModal, id, refreshData} = props;
 
-    //Sending the selected customer id to the database to delete the customer
-    const deleteCustomer = (id) => {
-        axios.delete(`Customers/DeleteCustomer/${id}`)
+    //Sending the selected store id to the database to delete the store
+    const deleteStore = (id) => {
+        axios.delete(`Stores/DeleteStore/${id}`)
         .then( ({data}) => {
             toggleModal(); 
             refreshData();              
@@ -24,7 +24,7 @@ const DeleteCustomer = (props) => {
                 <Button color='red' onClick={toggleModal}>
                 <Icon name='remove' /> No
                 </Button>
-                <Button color='green' onClick={()=>deleteCustomer(id)}>
+                <Button color='green' onClick={()=>deleteStore(id)}>
                 <Icon name='checkmark' /> Yes
                 </Button>
             </Modal.Actions>
@@ -33,4 +33,4 @@ const DeleteCustomer = (props) => {
     
 };
 
-export default DeleteCustomer;
+export default DeleteStore;

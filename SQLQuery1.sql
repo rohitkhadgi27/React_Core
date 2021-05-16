@@ -37,4 +37,17 @@ CREATE TABLE Product (
 	Price int
 );
 
+INSERT INTO Product (Name,Price)
+VALUES ('Mobile', 1500),
+	   ('TV', 3000),
+	   ('Laptop', 2000),
+	   ('Fridge', 700),
+	   ('Microwave', 400),
+	   ('AirFryer', 250),
+	   ('Soundbar', 500),
+	   ('HeadPhone', 220)
+
+SELECT * FROM Product
+
+	  
 

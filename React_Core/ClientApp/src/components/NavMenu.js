@@ -11,6 +11,7 @@ export class NavMenu extends Component {
       activeItem: 'home'
     }
 
+    //Getting the names of the menubar items from the URL 
     if (window.performance) {
       if (performance.navigation.type === 1) {      
         const url = window.location.href.split("")
@@ -22,6 +23,7 @@ export class NavMenu extends Component {
     }
   }
 
+  //Setting the menu items active when selected
   handleItemClick = (e, {name}) => this.setState({
     activeItem: name});
 
@@ -36,7 +38,7 @@ export class NavMenu extends Component {
             active={activeItem === 'home'}
             onClick={this.handleItemClick}
             as={Link}
-            to="/"
+            to="/home"
             
           />
           <Menu.Item link
