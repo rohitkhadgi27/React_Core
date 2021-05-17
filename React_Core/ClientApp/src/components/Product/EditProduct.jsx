@@ -3,9 +3,7 @@ import axios from 'axios';
 import { Button, Modal, Form } from 'semantic-ui-react'
 
 export default class EditProduct extends Component {
-
   constructor(props){
-    const{product}=props
     super(props)
     this.state = {
       name: "",
@@ -13,6 +11,13 @@ export default class EditProduct extends Component {
       errorMsg: "" 
     };
   }
+
+  // static getDerivedStateFromProps(nextProp, prevState){
+  //   return{
+  //     name: nextProp.product.name,
+  //     price: nextProp.product.price
+  //   };  
+  // }
 
   //Validating the edit input fields of products
   validate = () => {
@@ -22,7 +27,7 @@ export default class EditProduct extends Component {
     if(this.state.name.length >= 30 || this.state.name.length <= 2){
       errorMsg = "Name cannot be too long or too short!"
     }
-    if(this.state.price.length>=6){
+    if(this.state.price.length>=10){
       errorMsg = "Price cannot be that high !"
     }
     if(!this.state.name || !this.state.price){
@@ -37,7 +42,6 @@ export default class EditProduct extends Component {
     if(!(/\D/.test(this.state.name)) ){
       errorMsg = "Name field accepts only non-numberic value and cannot be empty!"
     }
-
     if(errorMsg){
       this.setState({errorMsg});
       return false;
@@ -48,9 +52,7 @@ export default class EditProduct extends Component {
 
   //Setting the userinput in the state
   changeHandler = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
+    this.setState({[event.target.name]: event.target.value});
   }
 
 
@@ -65,6 +67,7 @@ export default class EditProduct extends Component {
     })
     .then( ({data}) => {    
       this.setState({
+        
         errorMsg: ""
       });  
       toggleModal();
@@ -94,7 +97,7 @@ export default class EditProduct extends Component {
             <Form>
                 <Form.Field>
                 <label>Name</label>
-                <input name="name"  defaultValue={product.name} onChange={this.changeHandler} />     
+                <input name="name" defaultValue={product.name} onChange={this.changeHandler} />     
                 </Form.Field>
                 <Form.Field>
                 <label>Price</label>

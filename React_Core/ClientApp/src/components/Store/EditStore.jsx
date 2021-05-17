@@ -5,7 +5,6 @@ import { Button, Modal, Form } from 'semantic-ui-react'
 export default class CustomerProduct extends Component {
 
   constructor(props){
-    const{product}=props
     super(props)
     this.state = {
       name: "",
@@ -19,13 +18,11 @@ export default class CustomerProduct extends Component {
     var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     let errorMsg = "";
 
-    if(this.state > 50){
-      errorMsg = "Fields cannot be too long!"
+    if((this.state.name.length >= 30) || (this.state.name.length <= 2) || (this.state.address.length <= 2) || (this.state.name.length >= 50)){
+      errorMsg = "Too long or too short details is not valid!"
     }
-    if(this.state.name < 2){
-      errorMsg = "Too short name!"
-    }
-    if(!this.state.name || !this.state.address){
+    
+    if(!(this.state.name.length) || !(this.state.address.length)){
       errorMsg = "Fields cannot be blank!"
     }
     if(format.test(this.state.name) || format.test(this.state.address)){

@@ -5,6 +5,7 @@ import { Home } from './components/Home';
 import GetCustomers from './components/Customer/GetCustomers';
 import GetProducts from './components/Product/GetProducts';
 import GetStores from './components/Store/GetStores';
+import GetSales from './components/Sale/GetSales';
 import './custom.css'
 
 export default class App extends Component {
@@ -17,6 +18,7 @@ export default class App extends Component {
         <Route path='/customers' component={GetCustomers} />
         <Route path='/products' component={GetProducts} />
         <Route path='/stores' component={GetStores} />
+        <Route path='/sales' component={GetSales} />
       </Layout>
     );
   }

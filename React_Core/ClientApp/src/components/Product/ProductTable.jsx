@@ -52,7 +52,7 @@ export default class ProductTable extends Component {
       createModalState: false,
       editModalState: true,
       toggleModal: true,
-      info: productInfo
+      info: productInfo,
     })
   }
 
