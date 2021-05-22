@@ -12,9 +12,6 @@ export default class CreateCustomer extends Component {
     };
   }
 
-  //Receiving all the data that is passed from the StoreTable Component
-
-
   //Using hooks to grab the value given by the user
   changeHandler = (event) => {
     this.setState({
@@ -23,7 +20,7 @@ export default class CreateCustomer extends Component {
     
   }
 
-
+//Validation for the Store create form
   validate = () => {
     var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     let errorMsg = "";
@@ -48,8 +45,6 @@ export default class CreateCustomer extends Component {
     return true;
   }
 
-
-
   //Sending the new details of the store to the database to add new store
   createStore = (toggleModal, refreshData) => {
     const isValid = this.validate();
@@ -60,6 +55,8 @@ export default class CreateCustomer extends Component {
       })
       .then( ({data}) => {
         this.setState({
+          name: "",
+          address: "",
           errorMsg: ""
         });  
           toggleModal(); 
@@ -69,8 +66,11 @@ export default class CreateCustomer extends Component {
     }  
   };
 
+  //Close the modal and setting and empty state
   cancelStore = (toggleModal) => {
     this.setState({
+      name: "",
+      address: "",
       errorMsg: ""
     });
     toggleModal();

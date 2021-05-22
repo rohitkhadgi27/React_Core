@@ -59,10 +59,17 @@ export default class SaleTable extends Component {
     return(
       <div className="container">
 
+      
         {/* Switching to the Componenets from it's state's value */}
-        {this.state.deleteModalState && (<DeleteSale open={toggleModal} toggleModal={this.toggleModalHandler} id={this.state.id} refreshData={refreshData} /> )}
-        {this.state.createModalState && (<CreateSale open={toggleModal} toggleModal={this.toggleModalHandler} refreshData={refreshData} /> )}   
-        {this.state.editModalState && (<EditSale open={toggleModal} toggleModal={this.toggleModalHandler} sale={this.state.info} refreshData={refreshData} /> )}   
+        {this.state.deleteModalState && 
+        (<DeleteSale open={toggleModal} toggleModal={this.toggleModalHandler} id={this.state.id} refreshData={refreshData} /> )}
+
+        {this.state.createModalState && 
+        (<CreateSale open={toggleModal} toggleModal={this.toggleModalHandler} refreshData={refreshData} /> )}   
+
+        {this.state.editModalState && 
+        (<EditSale open={toggleModal} toggleModal={this.toggleModalHandler} sale={this.state.info}
+         refreshData={refreshData} /> )}   
 
 
         <Button primary onClick={()=>this.createModal()}><Icon name='plus' />New Sale</Button>

@@ -12,9 +12,6 @@ export default class CreateCustomer extends Component {
     };
   }
 
-  //Receiving all the data that is passed from the CustomerTable Component
-
-
   //Using hooks to grab the value given by the user
   changeHandler = (event) => {
     this.setState({
@@ -23,7 +20,7 @@ export default class CreateCustomer extends Component {
     
   }
 
-
+//Form validation for Customer while adding new ones
   validate = () => {
     var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     let errorMsg = "";
@@ -60,6 +57,8 @@ export default class CreateCustomer extends Component {
       })
       .then( ({data}) => {
         this.setState({
+          name: "",
+          address: "",
           errorMsg: ""
         });  
           toggleModal(); 
@@ -69,8 +68,11 @@ export default class CreateCustomer extends Component {
     }  
   };
 
+  //close modal and setting the states to empty
   cancelCustomer = (toggleModal) => {
     this.setState({
+      name: "",
+      address: "",
       errorMsg: ""
     });
     toggleModal();

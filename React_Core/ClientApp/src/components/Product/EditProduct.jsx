@@ -4,42 +4,51 @@ import { Button, Modal, Form } from 'semantic-ui-react'
 
 export default class EditProduct extends Component {
   constructor(props){
-    super(props)
-    this.state = {
+    super(props);
+    this.state = {     
       name: "",
       price: "",
-      errorMsg: "" 
+      errorMsg: "",
+      lastUser: null
     };
   }
-
-  // static getDerivedStateFromProps(nextProp, prevState){
-  //   return{
-  //     name: nextProp.product.name,
-  //     price: nextProp.product.price
-  //   };  
-  // }
+  
+  //Updating the state with the change in the props
+  static getDerivedStateFromProps(nextProps, prevState){
+    if (nextProps.product !== prevState.lastUser) {
+      return {
+        name: nextProps.product.name,
+        price: nextProps.product.price,
+        lastUser: nextProps.product
+      };
+    }else{
+      return null
+    }   
+  }
 
   //Validating the edit input fields of products
   validate = () => {
     var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     let errorMsg = "";
 
-    if(this.state.name.length >= 30 || this.state.name.length <= 2){
+    if(this.state.name.length >= 30){
       errorMsg = "Name cannot be too long or too short!"
     }
-    if(this.state.price.length>=10){
+    if(this.state.name.length <= 2){
+      errorMsg = "Name cannot be too short!"
+    }
+    
+    if(this.state.price.length>=20){
       errorMsg = "Price cannot be that high !"
     }
-    if(!this.state.name || !this.state.price){
-      errorMsg = "Fields cannot be blank!"
-    }
+   
     if(format.test(this.state.name) || format.test(this.state.price)){
       errorMsg = "Special characters are not allowed in the fields!"
     }
-    if((/\D/.test(this.state.price)) ){
+    if((/\D/.test(this.state.price))  || !(this.state.price)){
       errorMsg = "Price field accepts only numberic value and cannot be empty!"
     }
-    if(!(/\D/.test(this.state.name)) ){
+    if(!(/\D/.test(this.state.name))){
       errorMsg = "Name field accepts only non-numberic value and cannot be empty!"
     }
     if(errorMsg){
@@ -49,12 +58,10 @@ export default class EditProduct extends Component {
     return true;
   }
 
-
   //Setting the userinput in the state
   changeHandler = (event) => {
     this.setState({[event.target.name]: event.target.value});
   }
-
 
   //Saving the edited information from the input fields
   saveProduct = (product, toggleModal, refreshData) => { 
@@ -66,8 +73,7 @@ export default class EditProduct extends Component {
         price: this.state.price,
     })
     .then( ({data}) => {    
-      this.setState({
-        
+      this.setState({       
         errorMsg: ""
       });  
       toggleModal();
@@ -77,7 +83,6 @@ export default class EditProduct extends Component {
     }  
   };
   
-    
   //cancelling the modal
   cancelProduct = (toggleModal) => {
     this.setState({
@@ -97,11 +102,11 @@ export default class EditProduct extends Component {
             <Form>
                 <Form.Field>
                 <label>Name</label>
-                <input name="name" defaultValue={product.name} onChange={this.changeHandler} />     
+                <input name="name" value={this.state.name} onChange={this.changeHandler} />     
                 </Form.Field>
                 <Form.Field>
                 <label>Price</label>
-                <input name="price" defaultValue={product.price} onChange={this.changeHandler}/>
+                <input name="price" value={this.state.price} onChange={this.changeHandler}/>
                 </Form.Field>
             </Form>
           </Modal.Description>
@@ -114,6 +119,12 @@ export default class EditProduct extends Component {
     ); 
   }   
 };
+
+
+
+
+
+
 
 
 

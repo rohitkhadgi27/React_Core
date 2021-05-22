@@ -8,7 +8,6 @@ import '../Table.css';
 export default class ProductTable extends Component {
   constructor(props){
     super(props);
-    this.editModal = this.editModal.bind(this);
     this.state = {
       toggleModal: false,
     }  
@@ -72,7 +71,6 @@ export default class ProductTable extends Component {
       </Table.Row>
       )});
       
-
     return(
       <div className="container">
         <Button primary onClick={()=>this.createModal()}><Icon name='plus' />New Product</Button> 
@@ -94,7 +92,7 @@ export default class ProductTable extends Component {
         id={this.state.id} refreshData={refreshData} /> )}
         {this.state.createModalState && (<CreateProduct open={toggleModal} toggleModal={this.toggleModalHandler} 
         refreshData={refreshData} /> )}   
-        {this.state.editModalState && (<EditProduct open={toggleModal} toggleModal={this.toggleModalHandler} 
+        {this.state.editModalState && (<EditProduct open={toggleModal} toggleModal={this.toggleModalHandler}
         product={this.state.info} refreshData={refreshData}/> )}
       </div>  
     );     

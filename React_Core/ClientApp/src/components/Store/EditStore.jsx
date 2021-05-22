@@ -9,21 +9,41 @@ export default class CustomerProduct extends Component {
     this.state = {
       name: "",
       address: "",
-      errorMsg: "" 
+      errorMsg: "",
+      lastUser: null 
     };
   }
+
+  //Updating the state with the change in the props
+  static getDerivedStateFromProps(nextProps, prevState){
+    if (nextProps.store !== prevState.lastUser) {
+      return {
+        name: nextProps.store.name,
+        address: nextProps.store.address,
+        lastUser: nextProps.store
+      }  
+    }else{
+      return null
+    }   
+  }
+  
 
   //Validating the edit input fields of stores
   validate = () => {
     var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     let errorMsg = "";
 
-    if((this.state.name.length >= 30) || (this.state.name.length <= 2) || (this.state.address.length <= 2) || (this.state.name.length >= 50)){
-      errorMsg = "Too long or too short details is not valid!"
+    if(this.state.name.length >= 30){
+      errorMsg = "Name field cannot be too long!"
     }
-    
-    if(!(this.state.name.length) || !(this.state.address.length)){
-      errorMsg = "Fields cannot be blank!"
+    if(this.state.name.length <= 2){
+      errorMsg = "Name field cannot be too short!"
+    }
+    if(this.state.address.length <= 2){
+      errorMsg = "Address cannot be too short!"
+    }
+    if(this.state.address.length >= 50){
+      errorMsg = "Address cannot be too long!"
     }
     if(format.test(this.state.name) || format.test(this.state.address)){
       errorMsg = "Special characters are not allowed in the fields!"
@@ -85,11 +105,11 @@ export default class CustomerProduct extends Component {
             <Form>
                 <Form.Field>
                 <label>Name</label>
-                <input name="name"  defaultValue={store.name} onChange={this.changeHandler} />     
+                <input name="name"  value={this.state.name} onChange={this.changeHandler} />     
                 </Form.Field>
                 <Form.Field>
                 <label>Address</label>
-                <input name="address" defaultValue={store.address} onChange={this.changeHandler}/>
+                <input name="address" value={this.state.address} onChange={this.changeHandler}/>
                 </Form.Field>
             </Form>
           </Modal.Description>

@@ -12,9 +12,6 @@ export default class CreateProduct extends Component {
     };
   }
 
-  //Receiving all the data that is passed from the ProductTable Component
-
-
   //Using hooks to grab the value given by the user
   changeHandler = (event) => {
     this.setState({
@@ -23,7 +20,7 @@ export default class CreateProduct extends Component {
     
   }
 
-
+//Validation for adding new Products
   validate = () => {
     var format = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     let errorMsg = "";
@@ -53,8 +50,6 @@ export default class CreateProduct extends Component {
     return true;
   }
 
-
-
   //Sending the new details of the product to the database to add new product
   createProduct = (toggleModal, refreshData) => {
     const isValid = this.validate();
@@ -65,6 +60,8 @@ export default class CreateProduct extends Component {
       })
       .then( ({data}) => {
         this.setState({
+          name: "",
+          price: "",
           errorMsg: ""
         });  
           toggleModal(); 
@@ -74,13 +71,15 @@ export default class CreateProduct extends Component {
     }  
   };
 
+  //closing the modal and setting an empty state
   cancelProduct = (toggleModal) => {
     this.setState({
+      name: "",
+      price: "",
       errorMsg: ""
     });
     toggleModal();
   }
-
 
   render(){
     const{open, toggleModal, refreshData} = this.props;

@@ -1,64 +1,159 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Button, Form, Modal, Dropdown } from 'semantic-ui-react';
 import axios from 'axios';
-import { Button, Modal, Form } from 'semantic-ui-react'
 
 const CreateSale = (props) => {
+    const [customerlist] = useState([]);
+    const [productlist] = useState([]);
+    const [storelist] = useState([]);
+    const [errorMsg, setErrorMsg] = useState("");
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const [selectedProductId, setSelectedProductId] = useState(null);
+    const [selectedStoreId, setSelectedStoreId] = useState(null);
 
-  //Receiving all the data that is passed from the SaleTable Component
-  const{open, toggleModal, refreshData} = props;
+    //Props from SaleTable
+    const { open, toggleModal, refreshData } = props;
 
-  //Using hooks to grab the value given by the user
-  const[customer, setCustomer] = useState('');
-  const[product, setProduct] = useState('');
-  const[store, setStore] = useState('');
-  const[date, setDate] = useState('');
-
-  //Sending the new details of the sale to the database to add new sale
-  const createSale = () => {
-      axios.post(`Sales/PostSale`,{
-          customer: customer,
-          product: product,
-          store: store,
-          date: date
+    //Current time
+    const date = new Date().toLocaleString('en-US').slice(0, 9);
+  
+    //Adding new sale record in the database from the given list in drop down
+    const createSale = () => {
+      if((selectedCustomerId == null) || (selectedProductId == null) || (selectedStoreId == null)){
+        setErrorMsg("Fields cannot be black!");
+      }else{
+        axios.post(`Sales/PostSale`,{
+          ProductId: selectedProductId,
+          CustomerId: selectedCustomerId,
+          StoreId: selectedStoreId,
+          DateSold: date,
       })
       .then( ({data}) => {
+        setSelectedCustomerId(null);
+        setSelectedProductId(null);
+        setSelectedStoreId(null);
           toggleModal(); 
           refreshData();              
       })
       .catch(err => console.log(err));
-  };
+    }  
+  }
 
-  return(   
+  // closing the modal and settting the state to null
+  const cancelSale = () => {
+    setSelectedCustomerId(null);
+    setSelectedProductId(null);
+    setSelectedStoreId(null);
+    setErrorMsg("");
+    toggleModal();
+  }
+
+  // Getting all the customers, products and store list 
+    useEffect(() => {
+      axios.get('Customers/GetCustomers')
+        .then((res) => {
+          res.data.forEach((c) => {
+            customerlist.push({
+              key: c.id,
+              text: c.name,
+              value: c.name
+            });
+          });
+        })
+        .catch((err) => {
+            console.log(err)
+        });
+            
+        axios.get('Products/GetProducts')
+        .then((res) => {
+          res.data.forEach((p) => {
+            productlist.push({
+              key: p.id,
+              text: p.name,
+              value: p.name
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+
+        axios.get('Stores/GetStores')
+          .then((res) => {
+              res.data.forEach((s) => {
+                storelist.push({
+                  key: s.id,
+                  text: s.name,
+                  value: s.name
+                });
+              });
+            })
+            .catch((err) => {
+              console.log(err)
+            });    
+    }, []);
+
+    return (
       <Modal open={open}>
-      <Modal.Header>Create New Sale</Modal.Header>
-      <Modal.Content>
-        <Modal.Description>
-          <Form>
+        <Modal.Header>Create Sale</Modal.Header>
+        <div><h4 style={{color: "red", margin: "20px 0px 1px 20px"}}>{errorMsg}</h4></div>
+        <Modal.Content>
+          <Modal.Description>
+            <Form>
               <Form.Field>
-              <label>Customer</label>
-              <input placeholder='Enter Customer' onChange={(e)=>setCustomer(e.target.value)} />
+                <label>Sale Name</label>
+                <input type="text" value={date} />
               </Form.Field>
               <Form.Field>
-              <label>Product</label>
-              <input placeholder='Enter Product' onChange={(e)=>setProduct(e.target.value)} />
+                  <label>Choose Customer</label>
+                  <Dropdown placeholder='Select Customer' search selection options={customerlist} onChange={(e, data) => {
+                      const { value } = data;
+                      const { key } = (data.options.find(x => x.value === value));
+                      if(value == ''){
+                        setSelectedCustomerId(null)
+                      }else{
+                        setSelectedCustomerId(key);
+                      }
+                  }} />
+​
               </Form.Field>
               <Form.Field>
-              <label>Store</label>
-              <input placeholder='Enter Store' onChange={(e)=>setStore(e.target.value)} />
+                  <label>Choose Product</label>
+                  <Dropdown placeholder='Select Product' search selection options={productlist} onChange={(e, data) => {
+                      const { value } = data;
+                      const { key } = (data.options.find(x => x.value === value));
+                      if(value == ''){
+                        setSelectedProductId(null)
+                      }else{
+                        setSelectedProductId(key);
+                      }
+                  }} />
               </Form.Field>
               <Form.Field>
-              <label>Date</label>
-              <input placeholder='Enter Date' onChange={(e)=>setDate(e.target.value)} />
+                  <label>Choose Store</label>
+                  <Dropdown placeholder='Select Store' search selection options={storelist} onChange={(e, data) => {
+                      const { value } = data;
+                      const { key } = (data.options.find(x => x.value === value));
+                      if(value == ''){
+                        setSelectedStoreId(null)
+                      }else{
+                        setSelectedStoreId(key);
+                      }
+                  }} />
               </Form.Field>
-          </Form>
-        </Modal.Description>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button color='red' onClick={toggleModal}>Cancel</Button>
-        <Button positive onClick={createSale}>Create</Button>
-      </Modal.Actions>
-    </Modal>
-  );    
+            </Form>
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button color='yellow' onClick={cancelSale}>
+            Cancel
+          </Button>
+          <Button color='green' onClick={createSale}>
+            Create
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    );
 };
 
-export default CreateSale;
+export default CreateSale

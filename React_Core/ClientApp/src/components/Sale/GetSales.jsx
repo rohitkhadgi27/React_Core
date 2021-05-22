@@ -23,7 +23,6 @@ export default class GetSales extends Component {
   saleList() {
     axios.get(`Sales/GetSales`)
     .then(({data}) => {
-      console.log("sales=" +data)
       this.setState({
         sales: data
       });
